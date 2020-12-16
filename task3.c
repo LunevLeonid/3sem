@@ -67,10 +67,12 @@ int main(int argc, char* argv[]) {
 	
 	if (close(fd_wr) < 0) {
 		perror("Failed to close");
+		return 8;
 	}
 	
 	if (close(fd_rd) < 0) {
 		perror("Failed to close");
+		return 9;
 	}
 	return 0;
 }
