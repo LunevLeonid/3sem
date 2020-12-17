@@ -5,8 +5,6 @@
 #include <unistd.h>
 #include <string.h>
 
-#define N 512
-
 int main(int argc, char* argv[]) {
     if (argc != 3) {
         printf("Incorrect usage\n");
