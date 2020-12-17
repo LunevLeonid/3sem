@@ -5,8 +5,6 @@
 #include <unistd.h>
 #include <string.h>
 
-#define N 512
-
 int main(int argc, char* argv[]) {
     if (argc != 3) {
         printf("Incorrect usage\n");
@@ -14,6 +12,10 @@ int main(int argc, char* argv[]) {
     }
 
     int fd = open(argv[1], O_CREAT|O_WRONLY, S_IWUSR); //argv[1] - name of the file
+    if (fd < 0) {
+        perror("Failed to open");
+        return 3;
+    }
     
     ssize_t len = strlen(argv[2]);
     ssize_t i = 0;
