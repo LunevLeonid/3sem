@@ -42,18 +42,19 @@ int main(int argc, char* argv[]) {
 			}
 		} else {
 			if (lstat(dirp->d_name, &st_buf) == -1) {
-				perror("Unable to stat");
-				return 2;
-			}
-			switch (st_buf.st_mode & S_IFMT) {
-			case S_IFBLK:  printf("block device          "); break;
-			case S_IFCHR:  printf("character device      "); break;
-			case S_IFDIR:  printf("directory             "); break;
-			case S_IFIFO:  printf("FIFO/pipe             "); break;
-			case S_IFLNK:  printf("symlink               "); break;
-			case S_IFREG:  printf("regular file          "); break;
-			case S_IFSOCK: printf("socket                "); break;
-			default:       printf("unknown?              "); break;
+				perror("Failed to stat");
+				printf("unknown???            ");
+			} else {
+				switch (st_buf.st_mode & S_IFMT) {
+				case S_IFBLK:  printf("block device          "); break;
+				case S_IFCHR:  printf("character device      "); break;
+				case S_IFDIR:  printf("directory             "); break;
+				case S_IFIFO:  printf("FIFO/pipe             "); break;
+				case S_IFLNK:  printf("symlink               "); break;
+				case S_IFREG:  printf("regular file          "); break;
+				case S_IFSOCK: printf("socket                "); break;
+				default:       printf("unknown?              "); break;
+				}
 			}
 		}
 		printf("%s\n", dirp->d_name);
