@@ -10,14 +10,14 @@ int main(int argc, char* argv[]) {
 		printf("Not enough arguments");
 		return 1;
 	}
-	
+
 	struct stat st_buf;
 	int t = stat(argv[1], &st_buf);
 	if (t < 0) {
 		perror("Failed to stat");
 		return 2;
 	}
-	
+
 	printf("Mode: %06o\n", st_buf.st_mode);
 	printf("Size:  %ld B\n", st_buf.st_size);
 	printf("Blocks allocated: %ld\n", st_buf.st_blocks);
