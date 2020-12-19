@@ -35,7 +35,7 @@ int main(int argc, char argv[]) {
 			print_process_info();
 			break;
 		default:
-			wait(NULL);
+			wait(0);
 			printf("Parent process:\n");
 			print_process_info();
 			break;
