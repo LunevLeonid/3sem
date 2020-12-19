@@ -8,7 +8,7 @@
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
-		printf("Incorrect usage\n");
+		printf("Usage: %s readfile writefile\n", argv[0]);
 		return 1;
 	}
 	
@@ -22,11 +22,11 @@ int main(int argc, char* argv[]) {
 		perror("Failed to stat");
 		return 2;
 	}
-	if (((st_buf1.st_mode) & (S_IFMT)) != (S_IFREG)) {
+	if (S_ISREG(argv[1])) {
 		printf("Not regular read file\n");
 		return 3;
 	}
-	if (((st_buf2.st_mode) & (S_IFMT)) != (S_IFREG)) {
+	if (S_ISREG(argv[2])) {
 		printf("Not regular write file\n");
 		return 4;
 	}
@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
 	int fd_wr = open(argv[2], O_WRONLY);
 	if (fd_wr == -1) {
 		perror("Failed to open\n");
+		close(fd_wr);
 		return 5;
 	}
 	
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]) {
 		
 		ssize_t j = 0;
 		while (j < count_read) {
-			ssize_t count_write = pwrite(fd_wr, buf + j, count_read, j);
+			ssize_t count_write = pwrite(fd_wr, buf + j, count_read - j, j + i);
 			if (count_write == -1) {
 				perror("Failed to write");
 				return 7;
