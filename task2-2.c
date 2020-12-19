@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     }
 
     size_t len = strlen(argv[2]);
-    int count = dprintf(fd, "%s\n", argv[2]); //argv[2] - text to write
+    int count = dprintf(fd, "%s", argv[2]); //argv[2] - text to write
     if (ftruncate(fd, (long int)len) < 0) {
         perror("Failed to ftruncate");   
     } else if (count < 0) {
