@@ -7,69 +7,74 @@
 #include <dirent.h>
 #include <errno.h>
 
+const char* get_file_type(mode_t f_mode) {
+	switch (f_mode & S_IFMT) {
+		case S_IFBLK: return "block device"; break;
+		case S_IFCHR: return "character device"; break;
+		case S_IFDIR: return "directory"; break;
+		case S_IFIFO: return "FIFO/pype"; break;
+		case S_IFLNK: return "symlink"; break;
+		case S_IFREG: return "regular file"; break;
+		case S_IFSOCK: return "socket"; break;
+		default: return "unknown"; break;
+	}
+}
+
+const char* get_file_dtype(mode_t f_type) {
+	switch (f_type) {
+		case DT_BLK: return "block device"; break;
+		case DT_CHR: return "character device"; break;
+		case DT_DIR: return "directory"; break;
+		case DT_FIFO: return "pipe"; break;
+		case DT_LNK: return "symbolic"; break;
+		case DT_REG: return "regular file"; break;
+		case DT_SOCK: return "UNIX domain socket"; break;
+		default: return "unknown???"; break;
+	}
+}
+
 int main(int argc, char* argv[]) {
+	char* buf;
 	if (argc > 2) {
-		printf("Too much arguments");
+		printf("Usage: %s somedirectory", argv[0]);
 		return 1;
+	} else if (argc == 1) {
+		buf = ".";
+	} else {
+		buf = argv[1];
 	}
-	if (argc == 1) {
-		argv[1] = ".";
-	}
-	
-	DIR* dp = opendir(argv[1]);
+
+	DIR* dp = opendir(buf);
 	if (dp == NULL) {
 		perror("Unable to open directory");
 		return 4;
 	}
-	
+
 	struct stat st_buf;
 	errno = 0;
-	struct dirent *dirp = readdir(dp);
-	if (errno != 0) {
-		perror("Failed to read directory");
-		return 5;
-	}
-	while (dirp != NULL) {
+	struct dirent *dirp;
+	while ((dirp = readdir(dp)) != NULL) {
 		if (dirp->d_type != DT_UNKNOWN) {
-			switch(dirp->d_type) {
-			case DT_BLK: printf("block device            "); break;
-			case DT_CHR: printf("character device        "); break;
-			case DT_DIR: printf("directory               "); break;
-			case DT_FIFO: printf("pipe                    "); break;
-			case DT_LNK: printf("symbolic link           "); break;
-			case DT_REG: printf("regular file            "); break;
-			case DT_SOCK: printf("UNIX domain socket      "); break;
-			}
+			printf("%-20s", get_file_dtype(dirp->d_type));
 		} else {
 			if (lstat(dirp->d_name, &st_buf) == -1) {
-				perror("Failed to stat");
-				printf("unknown???            ");
+				printf("unknown???")
 			} else {
-				switch (st_buf.st_mode & S_IFMT) {
-				case S_IFBLK:  printf("block device          "); break;
-				case S_IFCHR:  printf("character device      "); break;
-				case S_IFDIR:  printf("directory             "); break;
-				case S_IFIFO:  printf("FIFO/pipe             "); break;
-				case S_IFLNK:  printf("symlink               "); break;
-				case S_IFREG:  printf("regular file          "); break;
-				case S_IFSOCK: printf("socket                "); break;
-				default:       printf("unknown?              "); break;
-				}
+				printf("%-20s", get_file_type(st_buf.st_mode));
 			}
 		}
 		printf("%s\n", dirp->d_name);
 		errno = 0;
-		dirp = readdir(dp);
-		if (errno != 0) {
-			perror("Failed to read");
-			return 6;
-		}
 	}
-	
+
+	if (errno != 0) {
+		perror("Reading directory error");
+	}
+
 	if (closedir(dp)) {
 		perror("Unable to close");
 		return 3;
 	}
-	
+
 	return 0;
 }
