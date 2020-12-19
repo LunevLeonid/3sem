@@ -10,13 +10,13 @@ void print_process_info() {
 	printf("Process parent id: %d\n", getppid());
 	struct passwd *pwd = getpwuid(getuid());
 	if (pwd == NULL) {
-		perror("Failed to getpwuid");
+		perror("Failed to get user and group id");
 	} else {
 		printf("User id: %d\n", pwd->pw_uid);
 		printf("Group id: %d\n", pwd->pw_uid);
 		struct group *gr = getgrgid(pwd->gid);
 		if (pwd == NULL) {
-			perror("Failed to getpwuid");
+			perror("Failed to get group name");
 		} else {
 			printf("Group name: %s\n", gr->gr_name);
 		}
