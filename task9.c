@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/vfs.h>
+#include <sys/statvfs.h>
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
