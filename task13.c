@@ -6,23 +6,9 @@
 #include <grp.h>
 #include <sys/wait.h>
 
-void print_process_info() {
-	printf("Process id: %d\n", getpid());
-	printf("Process parent id: %d\n", getppid());
-	struct passwd *pwd = getpwuid(getuid());
-	if (pwd == NULL) {
-		perror("Failed to getpwuid");
-	} else {
-		printf("User id: %d\n", pwd->pw_uid);
-		printf("Group id: %d\n", pwd->pw_gid);
-		struct group *gr = getgrgid(pwd->pw_gid);
-		if (pwd == NULL) {
-			perror("Failed to getpwuid");
-		} else {
-		printf("Group name: %s\n", gr->gr_name);
-	}
-}
-return;
+void print_process_info(const char* name) {
+	printf(%s\nprocess id %d\nparent process id %d\nuser id %d\group id, name, getpid(), getppid(), getuid(), getgid());
+	return;
 }
 
 int main() {
@@ -32,13 +18,11 @@ int main() {
 		perror("Failed to make a new process");
 		return 1;
 	case 0:
-		printf("Child process:\n");
-		print_process_info();
+		print_process_info("child");
 		break;
 	default:
 		wait(0);
-		printf("Parent process:\n");
-		print_process_info();
+		print_process_info("parent");
 		break;
 	}
 	return 0;
