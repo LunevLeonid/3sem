@@ -9,27 +9,27 @@
 
 const char* get_file_type(mode_t f_mode) {
 	switch (f_mode & S_IFMT) {
-		case S_IFBLK: return "block device"; break;
-		case S_IFCHR: return "character device"; break;
-		case S_IFDIR: return "directory"; break;
-		case S_IFIFO: return "FIFO/pype"; break;
-		case S_IFLNK: return "symlink"; break;
-		case S_IFREG: return "regular file"; break;
-		case S_IFSOCK: return "socket"; break;
-		default: return "unknown"; break;
+		case S_IFBLK: return "block device";
+		case S_IFCHR: return "character device";
+		case S_IFDIR: return "directory";
+		case S_IFIFO: return "FIFO/pype";
+		case S_IFLNK: return "symlink";
+		case S_IFREG: return "regular file";
+		case S_IFSOCK: return "socket";
+		default: return "unknown";
 	}
 }
 
 const char* get_file_dtype(uint8_t f_type) {
 	switch (f_type) {
-		case DT_BLK: return "block device"; break;
-		case DT_CHR: return "character device"; break;
-		case DT_DIR: return "directory"; break;
-		case DT_FIFO: return "pipe"; break;
-		case DT_LNK: return "symbolic"; break;
-		case DT_REG: return "regular file"; break;
-		case DT_SOCK: return "UNIX domain socket"; break;
-		default: return "unknown???"; break;
+		case DT_BLK: return "block device";
+		case DT_CHR: return "character device";
+		case DT_DIR: return "directory";
+		case DT_FIFO: return "pipe";
+		case DT_LNK: return "symbolic";
+		case DT_REG: return "regular file";
+		case DT_SOCK: return "UNIX domain socket";
+		default: return "unknown???";
 	}
 }
 
