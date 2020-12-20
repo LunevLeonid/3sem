@@ -20,7 +20,7 @@ const char* get_file_type(mode_t f_mode) {
 	}
 }
 
-const char* get_file_dtype(mode_t f_type) {
+const char* get_file_dtype(uint8_t f_type) {
 	switch (f_type) {
 		case DT_BLK: return "block device"; break;
 		case DT_CHR: return "character device"; break;
