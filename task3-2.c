@@ -18,17 +18,9 @@ int main(int argc, char* argv[]) {
 		perror("Failed to stat");
 		return 2;
 	}
-	if (lstat(argv[2], &st_buf2) == -1) {
-		perror("Failed to stat");
-		return 2;
-	}
-	if (S_ISREG(argv[1])) {
+	if (!S_ISREG(argv[1])) {
 		printf("Not regular read file\n");
 		return 3;
-	}
-	if (S_ISREG(argv[2])) {
-		printf("Not regular write file\n");
-		return 4;
 	}
 	
 	char buf[N];
@@ -45,12 +37,18 @@ int main(int argc, char* argv[]) {
 		return 5;
 	}
 	
+	if (ftruncate(fd_wr, 0) < 0) {
+		perror("Failed to change size of file");
+		close(fd_wr);
+		close(fd_rd);
+		return 3;
+	}
 	ssize_t i = 0; 
 	while (1) {
 		ssize_t count_read = pread(fd_rd, buf, N, i);
 		if (count_read == -1) {
 			perror("Failed to read\n");
-			return 6;
+			break;
 		}
 		if (count_read == 0) {
 			break;
@@ -61,6 +59,8 @@ int main(int argc, char* argv[]) {
 			ssize_t count_write = pwrite(fd_wr, buf + j, count_read - j, j + i);
 			if (count_write == -1) {
 				perror("Failed to write");
+				clode(fd_wr);
+				close(fd_rd);
 				return 7;
 			}
 			j += count_write;
