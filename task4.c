@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 		perror("Failed to stat");
 		return 2;
 	}
-	if (S_ISREG(st_buf1.st_mode)) {
+	if (!S_ISREG(st_buf1.st_mode)) {
 		printf("Not regular read file\n");
 		return 3;
 	}
@@ -34,6 +34,12 @@ int main(int argc, char* argv[]) {
 		return 5;
 	}
 
+	if (ftruncate(fd_wr, 0) < 0) {
+		perror("Failed to change size of file");
+		close(fd_wr);
+		close(fd_rd);
+		return 10;
+	}
 	while (1) {
 		ssize_t count_read = read(fd_rd, buf, N);
 		if (count_read == -1) {
