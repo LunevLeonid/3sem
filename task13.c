@@ -25,7 +25,7 @@ void print_process_info() {
 return;
 }
 
-int main(int argc, char argv[]) {
+int main() {
 	pid_t child_id = fork();
 	switch (child_id) {
 	case -1:
