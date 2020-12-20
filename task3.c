@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 		perror("Failed to stat");
 		return 2;
 	}
-	if (S_ISREG(st_buf.st_mode)) {
+	if (!S_ISREG(st_buf.st_mode)) {
 		printf("Not regular read file\n");
 		return 3;
 	}
@@ -32,10 +32,15 @@ int main(int argc, char* argv[]) {
 	int fd_wr = open(argv[2], O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR); //argv[2] - file we copy to
 	if (fd_wr == -1) {
 		perror("Failed to open\n");
-		close(fd_rd);
 		return 5;
 	}
 
+	if (ftruncate(fd_wr, 0) < 0) {
+		perror("Failed to change size of file");
+		close(fd_wr);
+		close(fd_rd);
+		return 8;
+	}
 	while (1) {
 		ssize_t count_read = read(fd_rd, buf, N);
 		if (count_read == -1) {
