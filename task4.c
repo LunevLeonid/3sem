@@ -8,27 +8,18 @@
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
-		printf("Incorrect usage\n");
+		printf("Usage: %s readfile writefile\n", argv[0]);
 		return 1;
 	}
 	
 	struct stat st_buf1;
-	struct stat st_buf2;
 	if (lstat(argv[1], &st_buf1) == -1) {
 		perror("Failed to stat");
 		return 2;
 	}
-	if (lstat(argv[2], &st_buf2) == -1) {
-		perror("Failed to stat");
-		return 2;
-	}
-	if (((st_buf1.st_mode) & (S_IFMT)) != (S_IFREG)) {
+	if (S_ISREG(st_buf1.st_mode)) {
 		printf("Not regular read file\n");
 		return 3;
-	}
-	if (((st_buf2.st_mode) & (S_IFMT)) != (S_IFREG)) {
-		printf("Not regular write file\n");
-		return 4;
 	}
 	
 	char buf[N];
@@ -47,6 +38,8 @@ int main(int argc, char* argv[]) {
 		ssize_t count_read = read(fd_rd, buf, N);
 		if (count_read == -1) {
 			perror("Failed to read\n");
+			close(fd_rd);
+			close(fd_wr);
 			return 6;
 		}
 		if (count_read == 0) {
@@ -55,7 +48,7 @@ int main(int argc, char* argv[]) {
 		
 		ssize_t i = 0;
 		while (i < count_read) {
-			ssize_t count_write = write(fd_wr, buf + i, count_read);
+			ssize_t count_write = write(fd_wr, buf + i, count_read - i);
 			if (count_write == -1) {
 				perror("Failed to write");
 				return 7;
