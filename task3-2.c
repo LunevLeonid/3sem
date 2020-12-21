@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 		perror("Failed to stat");
 		return 2;
 	}
-	if (!S_ISREG(argv[1])) {
+	if (!S_ISREG(st_buf1.st_mode)) {
 		printf("Not regular read file\n");
 		return 3;
 	}
