@@ -17,9 +17,10 @@ int main(int argc, char* argv[]) {
 	
 	int ngroups = getgroups(ngroups_max, gr);
 	printf("Process groups:\n");
+	struct group *grg;
 	for (int i = 0; i < ngroups; i++) {
 		printf("%d", gr[i]);
-		struct group *grg = getgrgid(gr[i]);
+		grg = getgrgid(gr[i]);
 		if (grg == NULL) {
 			perror("Failed to getgrgid");
 		} else {
