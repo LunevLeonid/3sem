@@ -26,6 +26,12 @@ int main(int argc, char* argv[]) {
 			printf("  %s\n", grg->gr_name);
 		}
 	}
+	mode_t mask = umask(S_IWGRP | S_IWOTH);
+	printf("Mask: %d\n", mask);
+	
+	char* dir = get_current_dir_name(); \\not a standart function
+	printf("Process current directory: %s\n", dir);
+	free(dir);
 	
 	free(gr);
 	return 0;
