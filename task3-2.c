@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 	int fd_wr = open(argv[2], O_WRONLY);
 	if (fd_wr == -1) {
 		perror("Failed to open\n");
-		close(fd_wr);
+		close(fd_rd);
 		return 5;
 	}
 	
