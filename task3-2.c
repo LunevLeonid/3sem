@@ -13,7 +13,6 @@ int main(int argc, char* argv[]) {
 	}
 	
 	struct stat st_buf1;
-	struct stat st_buf2;
 	if (lstat(argv[1], &st_buf1) == -1) {
 		perror("Failed to stat");
 		return 2;
